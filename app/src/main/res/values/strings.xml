@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BakingApp</string>
+    <string name="error_message">Something went wrong while loading data, please try again later.</string>
+    <string name="no_recipes_message">Sorry, but no reipes found at the moment.</string>
 </resources>
