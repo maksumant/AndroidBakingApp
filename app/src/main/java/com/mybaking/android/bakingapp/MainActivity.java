@@ -1,5 +1,6 @@
 package com.mybaking.android.bakingapp;
 
+import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.mybaking.android.bakingapp.adapter.RecipeListAdapter;
 import com.mybaking.android.bakingapp.domain.Recipe;
+import com.mybaking.android.bakingapp.utils.StringConstants;
 import com.mybaking.android.bakingapp.utils.JsonUtils;
 import com.mybaking.android.bakingapp.utils.NetworkUtils;
 
@@ -23,7 +25,7 @@ import java.net.URL;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Recipe[]>{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Recipe[]>, RecipeListAdapter.RecipeListAdapterOnClickHandler{
 
     @BindView(R.id.rv_recipe_cards)
     RecyclerView mRecyclerView;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(false);
 
-        mRecipeListAdapter = new RecipeListAdapter();
+        mRecipeListAdapter = new RecipeListAdapter(this);
         mRecyclerView.setAdapter(mRecipeListAdapter);
 
 
@@ -153,5 +155,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (mLayoutManagerSavedState != null) {
             mRecyclerView.getLayoutManager().onRestoreInstanceState(mLayoutManagerSavedState);
         }
+    }
+
+    @Override
+    public void onClick(Recipe clickedRecipe) {
+            Intent intent = new Intent(MainActivity.this, RecipeDetailsActivity.class);
+        System.out.println("Passing recipe for details: " + clickedRecipe);
+            intent.putExtra(StringConstants.EXTRA_CONTENT_NAME, clickedRecipe);
+            startActivity(intent);
     }
 }

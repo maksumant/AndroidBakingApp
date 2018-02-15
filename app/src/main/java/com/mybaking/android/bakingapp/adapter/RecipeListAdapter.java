@@ -18,6 +18,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     private Recipe[] recipes;
 
+    private RecipeListAdapterOnClickHandler recipeListAdapterOnClickHandler;
+
+    public RecipeListAdapter(RecipeListAdapterOnClickHandler onClickHandler) {
+        this.recipeListAdapterOnClickHandler = onClickHandler;
+    }
+
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
@@ -57,7 +63,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            System.out.println(" Recipe clicked: " + recipes[adapterPosition]);
+            System.out.println(" Recipe clicked: " + recipes[adapterPosition].getName());
+            recipeListAdapterOnClickHandler.onClick(recipes[adapterPosition]);
+
         }
     }
 
@@ -66,4 +74,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         notifyDataSetChanged();
     }
 
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface RecipeListAdapterOnClickHandler {
+        void onClick(Recipe clickedMovie);
+    }
 }
