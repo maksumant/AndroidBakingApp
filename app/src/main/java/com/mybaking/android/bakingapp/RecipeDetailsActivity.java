@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mybaking.android.bakingapp.domain.Recipe;
+import com.mybaking.android.bakingapp.domain.RecipeStep;
 import com.mybaking.android.bakingapp.ui.RecipeStepsFragment;
 import com.mybaking.android.bakingapp.utils.StringConstants;
 
@@ -13,7 +14,7 @@ import com.mybaking.android.bakingapp.utils.StringConstants;
  * Created by makrandsumant on 15/02/18.
  */
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeStepsFragment.StepsFragementOnClickListener {
     private RecipeStepsFragment recipeStepsFragment;
     private Recipe selectedRecipe = null;
     private final static String SELECTED_RECIPE_DATA_KEY = "selectedRecipe";
@@ -38,6 +39,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (this.recipeStepsFragment == null) {
             this.recipeStepsFragment = new RecipeStepsFragment();
             this.recipeStepsFragment.setCurrentRecipe(selectedRecipe);
+            this.recipeStepsFragment.setOnClickHandler(this);
+            this.recipeStepsFragment.setRetainInstance(true);
         }
         if(!this.recipeStepsFragment.isAdded()) {
             fragmentManager.beginTransaction().add(R.id.steps_container, recipeStepsFragment).commit();
@@ -48,5 +51,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SELECTED_RECIPE_DATA_KEY, this.selectedRecipe);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onClick(RecipeStep step) {
+        System.out.println("Clicked step:" + step);
+
+        final Intent intent = new Intent(this, StepDetailsActivity.class);
+        intent.putExtra("clickedStep", step);
+//        intent.putExtra("nextS")
+        startActivity(intent);
     }
 }
