@@ -1,8 +1,11 @@
 package com.mybaking.android.bakingapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.mybaking.android.bakingapp.domain.RecipeStep;
 import com.mybaking.android.bakingapp.ui.StepDetailsFragment;
@@ -16,7 +19,6 @@ public class StepDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_details);
-
 
         if (savedInstanceState == null) {
             Intent intentThatStartedThisActivity = getIntent();
@@ -32,13 +34,11 @@ public class StepDetailsActivity extends AppCompatActivity {
 
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         if(mStepDetailsFragment == null) {
-            System.out.println("$$#@############## new fragement created");
             mStepDetailsFragment = new StepDetailsFragment();
             mStepDetailsFragment.setRetainInstance(true);
             mStepDetailsFragment.setCurrentStep(mCurrentStep);
         }
             if(!mStepDetailsFragment.isAdded()) {
-                System.out.println("$$#@############## fragment ADDED");
                 fragmentManager.beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
             }
             this.setTitle(mCurrentStep.getShortDescription());

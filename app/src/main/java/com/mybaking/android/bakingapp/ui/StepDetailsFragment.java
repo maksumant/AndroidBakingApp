@@ -1,5 +1,7 @@
 package com.mybaking.android.bakingapp.ui;
 
+import android.app.Dialog;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,13 +40,11 @@ public class StepDetailsFragment extends Fragment {
     private SimpleExoPlayer mSimpleExoPlayer;
     private int mPlaybackState;
     private boolean mPlayWhenReady;
-
-    public void setCurrentStep(RecipeStep currentStep) {
-        this.currentStep = currentStep;
-    }
+    private Dialog mFullScreenDialog;
 
     private RecipeStep currentStep;
     private long mSeekPosition;
+    private boolean isLandscapeMode;
 
     @Nullable
     @Override
@@ -52,6 +52,7 @@ public class StepDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         TextView stepDescription = (TextView) rootView.findViewById(R.id.tv_step_instruction);
         mSimpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.ep_step_media_player);
+        isLandscapeMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
 
         if (savedInstanceState != null) {
@@ -64,15 +65,38 @@ public class StepDetailsFragment extends Fragment {
             }
 
         }
-        stepDescription.setText(currentStep.getDescription());
+        if(stepDescription != null) {
+            stepDescription.setText(currentStep.getDescription());
+        }
 
         String videoURL = currentStep.getVideoURL();
         if(videoURL!= null && !videoURL.isEmpty() && mSimpleExoPlayer == null) {
             mPlayWhenReady = true;
+            if (isLandscapeMode) {
+                openFullScreenMode();
+            }
             initializePlayer(Uri.parse(videoURL));
         }
         return rootView;
     }
+
+    private void openFullScreenMode() {
+        this.initFullscreenDialog();
+        ((ViewGroup) mSimpleExoPlayerView.getParent()).removeView(mSimpleExoPlayerView);
+        mFullScreenDialog.addContentView(mSimpleExoPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mFullScreenDialog.show();
+    }
+
+    private void initFullscreenDialog() {
+
+        mFullScreenDialog = new Dialog(this.getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+            public void onBackPressed() {
+                super.onBackPressed();
+                getActivity().finish();
+            }
+        };
+    }
+
 
     private void initializePlayer(Uri uri) {
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -94,10 +118,13 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(CURRENT_STEP_DATA_KEY, currentStep);
-        outState.putLong(VIDEO_SEEK_POSITION_KEY, mSimpleExoPlayer.getCurrentPosition());
-        outState.putInt(VIDEO_PLAYBACK_STATE_KEY, mSimpleExoPlayer.getPlaybackState());
-        outState.putBoolean(VIDEO_PLAY_WHEN_READY_KEY, mSimpleExoPlayer.getPlayWhenReady());
-        mSimpleExoPlayer.stop();
+        if (mSimpleExoPlayer != null) {
+            outState.putLong(VIDEO_SEEK_POSITION_KEY, mSimpleExoPlayer.getCurrentPosition());
+            outState.putInt(VIDEO_PLAYBACK_STATE_KEY, mSimpleExoPlayer.getPlaybackState());
+            outState.putBoolean(VIDEO_PLAY_WHEN_READY_KEY, mSimpleExoPlayer.getPlayWhenReady());
+
+            mSimpleExoPlayer.stop();
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -135,7 +162,14 @@ public class StepDetailsFragment extends Fragment {
             String videoURL = currentStep.getVideoURL();
             if(videoURL!= null && !videoURL.isEmpty()) {
                 initializePlayer(Uri.parse(videoURL));
+                if (isLandscapeMode) {
+                    openFullScreenMode();
+                }
             }
         }
+    }
+
+    public void setCurrentStep(RecipeStep currentStep) {
+        this.currentStep = currentStep;
     }
 }
