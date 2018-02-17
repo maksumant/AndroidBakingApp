@@ -10,6 +10,8 @@ import com.mybaking.android.bakingapp.domain.RecipeStep;
 import com.mybaking.android.bakingapp.ui.RecipeStepsFragment;
 import com.mybaking.android.bakingapp.utils.StringConstants;
 
+import java.util.ArrayList;
+
 /**
  * Created by makrandsumant on 15/02/18.
  */
@@ -58,7 +60,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         System.out.println("Clicked step:" + step);
 
         final Intent intent = new Intent(this, StepDetailsActivity.class);
-        intent.putExtra("clickedStep", step);
+        int index = selectedRecipe.getSteps().indexOf(step);
+        System.out.println("############## Selected recipe index:" + index);
+        intent.putExtra(StringConstants.EXTRA_CURRENT_STEP_INDEX, index);
+        intent.putParcelableArrayListExtra(StringConstants.EXTRA_RECIPE_ALL_STEPS, (ArrayList<RecipeStep>) selectedRecipe.getSteps());
+
 //        intent.putExtra("nextS")
         startActivity(intent);
     }
