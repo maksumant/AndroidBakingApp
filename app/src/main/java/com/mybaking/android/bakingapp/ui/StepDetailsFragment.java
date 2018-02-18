@@ -44,7 +44,11 @@ public class StepDetailsFragment extends Fragment {
 
     private RecipeStep currentStep;
     private long mSeekPosition;
-    private boolean isLandscapeMode;
+    private boolean showFullScreenVideo;
+
+    public void setShowFullScreenVideo(boolean showFullScreenVideo) {
+        this.showFullScreenVideo = showFullScreenVideo;
+    }
 
     @Nullable
     @Override
@@ -52,7 +56,6 @@ public class StepDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         TextView stepDescription = (TextView) rootView.findViewById(R.id.tv_step_instruction);
         mSimpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.ep_step_media_player);
-        isLandscapeMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
 
         if (savedInstanceState != null) {
@@ -65,17 +68,20 @@ public class StepDetailsFragment extends Fragment {
             }
 
         }
-        if(stepDescription != null) {
-            stepDescription.setText(currentStep.getDescription());
-        }
 
-        String videoURL = currentStep.getVideoURL();
-        if(videoURL!= null && !videoURL.isEmpty() && mSimpleExoPlayer == null) {
-            mPlayWhenReady = true;
-            if (isLandscapeMode) {
-                openFullScreenMode();
+        if (currentStep != null) {
+            if (stepDescription != null) {
+                stepDescription.setText(currentStep.getDescription());
             }
-            initializePlayer(Uri.parse(videoURL));
+
+            String videoURL = currentStep.getVideoURL();
+            if (videoURL != null && !videoURL.isEmpty() && mSimpleExoPlayer == null) {
+                mPlayWhenReady = true;
+                if (showFullScreenVideo) {
+                    openFullScreenMode();
+                }
+                initializePlayer(Uri.parse(videoURL));
+            }
         }
         return rootView;
     }
@@ -122,7 +128,6 @@ public class StepDetailsFragment extends Fragment {
             outState.putLong(VIDEO_SEEK_POSITION_KEY, mSimpleExoPlayer.getCurrentPosition());
             outState.putInt(VIDEO_PLAYBACK_STATE_KEY, mSimpleExoPlayer.getPlaybackState());
             outState.putBoolean(VIDEO_PLAY_WHEN_READY_KEY, mSimpleExoPlayer.getPlayWhenReady());
-
             mSimpleExoPlayer.stop();
         }
         super.onSaveInstanceState(outState);
@@ -159,11 +164,13 @@ public class StepDetailsFragment extends Fragment {
                 mPlayWhenReady = savedInstanceState.getBoolean(VIDEO_PLAY_WHEN_READY_KEY);
             }
 
-            String videoURL = currentStep.getVideoURL();
-            if(videoURL!= null && !videoURL.isEmpty()) {
-                initializePlayer(Uri.parse(videoURL));
-                if (isLandscapeMode) {
-                    openFullScreenMode();
+            if (currentStep != null) {
+                String videoURL = currentStep.getVideoURL();
+                if (videoURL != null && !videoURL.isEmpty()) {
+                    initializePlayer(Uri.parse(videoURL));
+                    if (showFullScreenVideo) {
+                        openFullScreenMode();
+                    }
                 }
             }
         }

@@ -22,11 +22,16 @@ public class StepDetailsActivity extends AppCompatActivity {
     private ArrayList<RecipeStep> mAllSteps;
     private int mCurrentStepIndex;
     private static final String SELECTED_STEP_KEY = "selectedStep";
+    private static final String ALL_STEPS_KEY = "allSteps";
+    private static final String SELECTED_STEP_INDEX_KEY = "selectedStepIndex";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_details);
+        boolean isLandscapeMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
 
         if (savedInstanceState == null) {
             Intent intentThatStartedThisActivity = getIntent();
@@ -40,19 +45,27 @@ public class StepDetailsActivity extends AppCompatActivity {
             if (savedInstanceState.containsKey(SELECTED_STEP_KEY)) {
                 mCurrentStep = (RecipeStep) savedInstanceState.get(SELECTED_STEP_KEY);
             }
+            if (savedInstanceState.containsKey(SELECTED_STEP_INDEX_KEY)) {
+                mCurrentStepIndex = savedInstanceState.getInt(SELECTED_STEP_INDEX_KEY);
+            }
+            if (savedInstanceState.containsKey(ALL_STEPS_KEY)) {
+                mAllSteps = savedInstanceState.getParcelableArrayList(ALL_STEPS_KEY);
+            }
             mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "stepDetailsFragement");
         }
 
-            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        if(mStepDetailsFragment == null) {
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        if (mStepDetailsFragment == null) {
             mStepDetailsFragment = new StepDetailsFragment();
             mStepDetailsFragment.setRetainInstance(true);
             mStepDetailsFragment.setCurrentStep(mCurrentStep);
         }
-            if(!mStepDetailsFragment.isAdded()) {
-                fragmentManager.beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
-            }
-            this.setTitle(mCurrentStep.getShortDescription());
+        mStepDetailsFragment.setShowFullScreenVideo(isLandscapeMode);
+        if (!mStepDetailsFragment.isAdded()) {
+            fragmentManager.beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
+        }
+        this.setTitle(mCurrentStep.getShortDescription());
+
 
         // Set next step button
         final Intent nextStepIntent = createIntentForNextStep();
@@ -64,6 +77,7 @@ public class StepDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(nextStepIntent);
+                    finish();
                 }
             });
         }
@@ -78,9 +92,11 @@ public class StepDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(prevStepIntent);
+                    finish();
                 }
             });
         }
+
     }
 
     private Intent createIntentForNextStep() {
@@ -88,7 +104,6 @@ public class StepDetailsActivity extends AppCompatActivity {
         if(nextIndex == mAllSteps.size()) {
             return null;
         }
-
         Intent nextStepIntent = new Intent(this, StepDetailsActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelableArrayList(StringConstants.EXTRA_RECIPE_ALL_STEPS, mAllSteps);
@@ -102,7 +117,6 @@ public class StepDetailsActivity extends AppCompatActivity {
         if(prevIndex < 0) {
             return null;
         }
-
         Intent prevStepIntent = new Intent(this, StepDetailsActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelableArrayList(StringConstants.EXTRA_RECIPE_ALL_STEPS, mAllSteps);
@@ -114,6 +128,8 @@ public class StepDetailsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SELECTED_STEP_KEY, this.mCurrentStep);
+        outState.putInt(SELECTED_STEP_INDEX_KEY, this.mCurrentStepIndex);
+        outState.putParcelableArrayList(ALL_STEPS_KEY, this.mAllSteps);
         getSupportFragmentManager().putFragment(outState, "stepDetailsFragement", mStepDetailsFragment);
         super.onSaveInstanceState(outState);
     }
