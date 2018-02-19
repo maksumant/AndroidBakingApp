@@ -136,6 +136,9 @@ public class StepDetailsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mFullScreenDialog != null) {
+            mFullScreenDialog.dismiss();
+        }
         releasePlayer();
     }
 
@@ -173,6 +176,14 @@ public class StepDetailsFragment extends Fragment {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mFullScreenDialog != null) {
+            mFullScreenDialog.dismiss();
         }
     }
 

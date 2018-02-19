@@ -51,16 +51,6 @@ public class RecipeStepsFragment extends Fragment {
         this.mDetailsScrollView = (ScrollView) rootView.findViewById(R.id.sv_recipe_details);
         LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.ll_recipes_fragment);
 
-//        mDetailsScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-//
-//            @Override
-//            public void onScrollChanged() {
-//                System.out.println("X: " + mDetailsScrollView.getScrollX());
-//                System.out.println("Y: " + mDetailsScrollView.getScrollY());
-//            }
-//        });
-
-
         if(savedInstanceState!=null) {
             if( savedInstanceState.containsKey(CURRENT_RECIPE_DATA_KEY)) {
                 this.currentRecipe = (Recipe) savedInstanceState.get(CURRENT_RECIPE_DATA_KEY);
@@ -95,7 +85,6 @@ public class RecipeStepsFragment extends Fragment {
         }
 
         if(savedInstanceState!=null && savedInstanceState.containsKey("SCROLL_POSITION")) {
-            System.out.println("******* found scroll position in saved state.");
             mScrollViewPosition = savedInstanceState.getIntArray("SCROLL_POSITION");
 //            if (position != null)
 //                mDetailsScrollView.post(new Runnable() {
