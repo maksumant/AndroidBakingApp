@@ -30,6 +30,7 @@
             android:src="@android:drawable/ic_media_next"
             android:paddingLeft="50dp"
             android:visibility="invisible"
+            android:contentDescription="Next recipe button"
             />
     </LinearLayout>
     <TextView

@@ -12,6 +12,7 @@ import com.mybaking.android.bakingapp.BakingAppWidget;
 import com.mybaking.android.bakingapp.domain.Recipe;
 import com.mybaking.android.bakingapp.utils.JsonUtils;
 import com.mybaking.android.bakingapp.utils.NetworkUtils;
+import com.mybaking.android.bakingapp.utils.StringConstants;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -55,8 +56,8 @@ public class BakingRecipesService extends IntentService {
     }
 
     private void handleGetIndividualRecipeAction(Intent intent) {
-        if (intent.hasExtra("currentRecipe")) {
-            mCurrentRecipe = (Recipe) intent.getParcelableExtra("currentRecipe");
+        if (intent.hasExtra(StringConstants.EXTRA_CURRENT_RECIPE)) {
+            mCurrentRecipe = (Recipe) intent.getParcelableExtra(StringConstants.EXTRA_CURRENT_RECIPE);
         }
         if (mAllRecipes == null) {
             new LoadRecipeTask().execute(new Context[]{this});
@@ -87,7 +88,7 @@ public class BakingRecipesService extends IntentService {
         }
     }
 
-    public  class LoadRecipeTask extends AsyncTask<Context, Void, Recipe[]> {
+    public class LoadRecipeTask extends AsyncTask<Context, Void, Recipe[]> {
         private Context context;
 
         @Override

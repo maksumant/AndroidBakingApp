@@ -34,7 +34,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (findViewById(R.id.ll_recipe_details) != null) {
-            System.out.println("4z$$$$$$$$$$$$$$ two pane true");
             mTwoPane  = true;
             setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -47,8 +46,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                 this.selectedRecipe = (Recipe) intentThatStartedThisActivity.getParcelableExtra(StringConstants.EXTRA_CONTENT_NAME);
             }
 
-
-            System.out.println("Selected recipe in details activity:" + selectedRecipe);
             if (this.recipeStepsFragment == null) {
                 this.recipeStepsFragment = new RecipeStepsFragment();
                 this.recipeStepsFragment.setCurrentRecipe(selectedRecipe);
@@ -63,7 +60,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
             if (mStepDetailsFragment == null) {
                 mStepDetailsFragment = new StepDetailsFragment();
                 mStepDetailsFragment.setShowFullScreenVideo(false);
-//                mStepDetailsFragment.setCurrentStep(mCurrentStep);
             }
             if (!mStepDetailsFragment.isAdded()) {
                 fragmentManager.beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
@@ -79,8 +75,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                 this.selectedRecipe = (Recipe) intentThatStartedThisActivity.getParcelableExtra(StringConstants.EXTRA_CONTENT_NAME);
             }
 
-
-            System.out.println("Selected recipe in details activity:" + selectedRecipe);
             if (this.recipeStepsFragment == null) {
                 this.recipeStepsFragment = new RecipeStepsFragment();
                 this.recipeStepsFragment.setCurrentRecipe(selectedRecipe);
@@ -102,8 +96,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
     @Override
     public void onClick(RecipeStep step) {
-        System.out.println("Clicked step:" + step);
-
         if (!this.mTwoPane) {
             final Intent intent = new Intent(this, StepDetailsActivity.class);
             int index = selectedRecipe.getSteps().indexOf(step);

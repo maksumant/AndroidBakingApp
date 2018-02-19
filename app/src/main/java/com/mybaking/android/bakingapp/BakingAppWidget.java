@@ -12,6 +12,7 @@ import android.widget.RemoteViews;
 import com.mybaking.android.bakingapp.domain.Ingredient;
 import com.mybaking.android.bakingapp.domain.Recipe;
 import com.mybaking.android.bakingapp.service.BakingRecipesService;
+import com.mybaking.android.bakingapp.utils.StringConstants;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class BakingAppWidget extends AppWidgetProvider {
         Intent intent = new Intent(context, BakingRecipesService.class);
         intent.setAction(ACTION_GET_RECIPE);
         if (currentRecipe != null) {
-            intent.putExtra("currentRecipe", currentRecipe);
+            intent.putExtra(StringConstants.EXTRA_CURRENT_RECIPE, currentRecipe);
         }
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.iv_next_recipe, pendingIntent);

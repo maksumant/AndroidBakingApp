@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
         this.loadRecipeDetails();
-//        mRecipeListAdapter.setRecipes(new String[] {"recipe 1", "recipe sdadad ads adas das 2", "recipe 3", "recipe 4", "recipe 5"});
     }
 
     private void loadRecipeDetails() {
@@ -180,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onClick(Recipe clickedRecipe) {
             Intent intent = new Intent(MainActivity.this, RecipeDetailsActivity.class);
-        System.out.println("Passing recipe for details: " + clickedRecipe);
             intent.putExtra(StringConstants.EXTRA_CONTENT_NAME, clickedRecipe);
             startActivity(intent);
     }
