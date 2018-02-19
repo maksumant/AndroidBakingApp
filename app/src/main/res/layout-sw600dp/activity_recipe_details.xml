@@ -5,10 +5,13 @@
         android:orientation="horizontal"
         android:id="@+id/ll_recipe_details">
 
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="400dp" android:layout_height="match_parent" android:id="@+id/sv_recipe_details">
         <FrameLayout
             android:layout_width="400dp"
             android:layout_height="match_parent"
             android:id="@+id/steps_container"></FrameLayout>
+    </ScrollView>
 
         <View android:layout_width="1dp"
             android:layout_height="match_parent"

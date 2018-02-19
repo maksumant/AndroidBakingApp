@@ -30,8 +30,8 @@ public class RecipeStepsFragment extends Fragment {
     private static final String CURRENT_RECIPE_DATA_KEY = "currentRecipe";
     private Recipe currentRecipe;
     private StepsFragementOnClickListener onClickHandler;
-    private ScrollView mDetailsScrollView;
-    private int[] mScrollViewPosition;
+
+//    private int[] mScrollViewPosition;
 
     public RecipeStepsFragment() {
 
@@ -48,7 +48,7 @@ public class RecipeStepsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container, false);
 
         TextView ingredientsTextView = (TextView) rootView.findViewById(R.id.tv_ingredients);
-        this.mDetailsScrollView = (ScrollView) rootView.findViewById(R.id.sv_recipe_details);
+
         LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.ll_recipes_fragment);
 
         if(savedInstanceState!=null) {
@@ -84,15 +84,15 @@ public class RecipeStepsFragment extends Fragment {
             }
         }
 
-        if(savedInstanceState!=null && savedInstanceState.containsKey("SCROLL_POSITION")) {
-            mScrollViewPosition = savedInstanceState.getIntArray("SCROLL_POSITION");
-//            if (position != null)
+//        if(savedInstanceState!=null && savedInstanceState.containsKey("SCROLL_POSITION")) {
+//            mScrollViewPosition = savedInstanceState.getIntArray("SCROLL_POSITION");
+//            if (mScrollViewPosition != null)
 //                mDetailsScrollView.post(new Runnable() {
 //                    public void run() {
-//                        mDetailsScrollView.scrollTo(position[0], position[1]);
+//                        mDetailsScrollView.scrollTo(mScrollViewPosition[0], mScrollViewPosition[1]);
 //                    }
 //                });
-        }
+//        }
 
         return rootView;
     }
@@ -126,8 +126,7 @@ public class RecipeStepsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(CURRENT_RECIPE_DATA_KEY, this.currentRecipe);
-        outState.putIntArray("SCROLL_POSITION",
-                new int[]{ mDetailsScrollView.getScrollX(), mDetailsScrollView.getScrollY()});
+
         super.onSaveInstanceState(outState);
     }
 
@@ -137,5 +136,11 @@ public class RecipeStepsFragment extends Fragment {
 
     public interface StepsFragementOnClickListener {
         public void onClick(RecipeStep step);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 }

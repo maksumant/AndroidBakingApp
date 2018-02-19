@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ScrollView;
 
 import com.mybaking.android.bakingapp.domain.Recipe;
 import com.mybaking.android.bakingapp.domain.RecipeStep;
@@ -24,6 +25,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     private Recipe selectedRecipe = null;
     private final static String SELECTED_RECIPE_DATA_KEY = "selectedRecipe";
     private boolean mTwoPane;
+    private ScrollView mDetailsScrollView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
         Intent intentThatStartedThisActivity = getIntent();
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+
+        this.mDetailsScrollView = (ScrollView) findViewById(R.id.sv_recipe_details);
 
         if (findViewById(R.id.ll_recipe_details) != null) {
             mTwoPane  = true;
@@ -71,6 +75,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
             if (savedInstanceState != null &&
                     savedInstanceState.containsKey(SELECTED_RECIPE_DATA_KEY)) {
                 this.selectedRecipe = (Recipe) savedInstanceState.get(SELECTED_RECIPE_DATA_KEY);
+                recipeStepsFragment = (RecipeStepsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "recipeStepsFragment");
+
             } else if (this.selectedRecipe == null && intentThatStartedThisActivity.hasExtra(StringConstants.EXTRA_CONTENT_NAME)) {
                 this.selectedRecipe = (Recipe) intentThatStartedThisActivity.getParcelableExtra(StringConstants.EXTRA_CONTENT_NAME);
             }
@@ -82,7 +88,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                 this.recipeStepsFragment.setRetainInstance(true);
             }
             if (!this.recipeStepsFragment.isAdded()) {
-                fragmentManager.beginTransaction().add(R.id.steps_container, recipeStepsFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.steps_container, recipeStepsFragment).commit();
+            }
+            if(savedInstanceState != null) {
+                if (savedInstanceState.containsKey("SCROLL_POSITION")) {
+                    final int[] scrollViewPosition = savedInstanceState.getIntArray("SCROLL_POSITION");
+                    if (scrollViewPosition != null)
+                        mDetailsScrollView.post(new Runnable() {
+                            public void run() {
+                                mDetailsScrollView.scrollTo(scrollViewPosition[0], scrollViewPosition[1]);
+                            }
+                        });
+                }
             }
         }
         this.setTitle(this.selectedRecipe.getName());
@@ -91,6 +108,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SELECTED_RECIPE_DATA_KEY, this.selectedRecipe);
+        getSupportFragmentManager().putFragment(outState, "recipeStepsFragment", recipeStepsFragment);
+        outState.putIntArray("SCROLL_POSITION",
+                new int[]{ mDetailsScrollView.getScrollX(), mDetailsScrollView.getScrollY()});
         super.onSaveInstanceState(outState);
     }
 
