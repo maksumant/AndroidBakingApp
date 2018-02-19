@@ -125,4 +125,24 @@ public class Recipe implements Parcelable{
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Recipe recipe = (Recipe) o;
+
+        if (id != recipe.id) return false;
+        if (servings != recipe.servings) return false;
+        return name != null ? name.equals(recipe.name) : recipe.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + servings;
+        return result;
+    }
 }

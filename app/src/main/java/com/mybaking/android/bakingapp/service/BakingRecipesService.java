@@ -61,10 +61,12 @@ public class BakingRecipesService extends IntentService {
         if (mAllRecipes == null) {
             new LoadRecipeTask().execute(new Context[]{this});
 
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while (mAllRecipes == null) {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if(mAllRecipes != null) {

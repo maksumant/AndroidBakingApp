@@ -5,10 +5,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
 import android.widget.RemoteViews;
 
+import com.mybaking.android.bakingapp.domain.Ingredient;
 import com.mybaking.android.bakingapp.domain.Recipe;
 import com.mybaking.android.bakingapp.service.BakingRecipesService;
+
+import java.util.List;
 
 /**
  * Implementation of App Widget functionality.
@@ -19,26 +23,44 @@ public class BakingAppWidget extends AppWidgetProvider {
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, Recipe currentRecipe) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text) + "Loaded recipe:" + currentRecipe.getName();
-        System.out.println("Loaded recipe : "+ widgetText);
+        CharSequence recipeName = currentRecipe.getName();
+        System.out.println("Loaded recipe : "+ recipeName);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        views.setTextViewText(R.id.recipe_name, recipeName);
 
-//        Intent intent = new Intent(context, MainActivity.class);
+        String ingredients = generateIngredientsString(currentRecipe.getIngredients(), context);
+        views.setTextViewText(R.id.recipe_ingredients, Html.fromHtml(ingredients));
+
         Intent intent = new Intent(context, BakingRecipesService.class);
         intent.setAction(ACTION_GET_RECIPE);
         if (currentRecipe != null) {
             intent.putExtra("currentRecipe", currentRecipe);
         }
-        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.iv_next_recipe, pendingIntent);
 
-        views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
+        Intent appIntent = new Intent(context, MainActivity.class);
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, 0);
+        views.setOnClickPendingIntent(R.id.recipe_name, appPendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    private static String generateIngredientsString(List<Ingredient> ingredients, Context context) {
+        if (ingredients != null && !ingredients.isEmpty()) {
+            StringBuilder ingredientsStr = new StringBuilder();
+            ingredientsStr.append("<b>").append(context.getString(R.string.ingredients)).append("</b><br/>");
+            ingredientsStr.append("<small>");
+            for (Ingredient ingredient : ingredients) {
+                ingredientsStr.append("- ").append(ingredient.getName()).append(": ").append(" ").append(ingredient.getQuantity()).append(" ").append(ingredient.getMeasure()).append("<br/>");
+            }
+            ingredientsStr.append("</small>");
+            return ingredientsStr.toString();
+        }
+        return "";
+    }
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         BakingRecipesService.startActionUpdateBakingWidgets(context);
