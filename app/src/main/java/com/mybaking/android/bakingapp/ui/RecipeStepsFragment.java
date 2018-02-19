@@ -75,6 +75,7 @@ public class RecipeStepsFragment extends Fragment {
             for (final RecipeStep step : currentRecipe.getSteps()) {
                 tvStepDesc = new TextView(this.getContext());
                 tvStepDesc.setText(step.getDescription());
+                tvStepDesc.setContentDescription("stepDesc");
                 tvStepDesc.setBackgroundResource(R.drawable.rounded_corner);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT );
                 layoutParams.setMargins(5,10,5,0);

@@ -2,6 +2,10 @@ package com.mybaking.android.bakingapp;
 
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 
 import com.mybaking.android.bakingapp.adapter.RecipeListAdapter;
 import com.mybaking.android.bakingapp.domain.Recipe;
+import com.mybaking.android.bakingapp.test.MainIdlingResource;
 import com.mybaking.android.bakingapp.utils.StringConstants;
 import com.mybaking.android.bakingapp.utils.JsonUtils;
 import com.mybaking.android.bakingapp.utils.NetworkUtils;
@@ -43,6 +48,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String SAVED_LAYOUT_MANAGER = "savedLayoutManager";
 
     private Parcelable mLayoutManagerSavedState = null;
+
+    @Nullable
+    private MainIdlingResource mIdlingResource;
+
+    /**
+     * Only called from test
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new MainIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
 
     @Override
