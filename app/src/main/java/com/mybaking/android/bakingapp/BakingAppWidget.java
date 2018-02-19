@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.mybaking.android.bakingapp.domain.Ingredient;
@@ -43,6 +44,8 @@ public class BakingAppWidget extends AppWidgetProvider {
         Intent appIntent = new Intent(context, MainActivity.class);
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, 0);
         views.setOnClickPendingIntent(R.id.recipe_name, appPendingIntent);
+
+        views.setViewVisibility(R.id.iv_next_recipe, View.VISIBLE);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

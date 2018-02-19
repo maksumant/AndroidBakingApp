@@ -29,13 +29,9 @@
             android:layout_height="50dp"
             android:src="@android:drawable/ic_media_next"
             android:paddingLeft="50dp"
+            android:visibility="invisible"
             />
-
     </LinearLayout>
-    <!--<view-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="2dp"-->
-        <!--android:background="@color/colorPrimaryDark"/>-->
     <TextView
         android:id="@+id/recipe_ingredients"
         android:layout_width="wrap_content"
