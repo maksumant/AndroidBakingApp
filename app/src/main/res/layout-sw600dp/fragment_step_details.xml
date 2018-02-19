@@ -23,7 +23,6 @@
         android:id="@+id/tv_step_instruction"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:text="TextView"
         android:fontFamily="sans-serif-condensed"
         android:paddingStart="10dp"
         android:paddingTop="10dp"

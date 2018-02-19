@@ -47,6 +47,10 @@ public class BakingAppWidget extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.recipe_name, appPendingIntent);
 
         views.setViewVisibility(R.id.iv_next_recipe, View.VISIBLE);
+        views.setViewVisibility(R.id.recipe_name, View.VISIBLE);
+        views.setViewVisibility(R.id.laoding_text, View.GONE);
+        views.setViewVisibility(R.id.iv_app_icon, View.GONE);
+
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -55,7 +59,7 @@ public class BakingAppWidget extends AppWidgetProvider {
     private static String generateIngredientsString(List<Ingredient> ingredients, Context context) {
         if (ingredients != null && !ingredients.isEmpty()) {
             StringBuilder ingredientsStr = new StringBuilder();
-            ingredientsStr.append("<b>").append(context.getString(R.string.ingredients)).append("</b><br/>");
+            ingredientsStr.append("<b>").append(context.getString(R.string.ingredients)).append(":</b><br/><br/>");
             ingredientsStr.append("<small>");
             for (Ingredient ingredient : ingredients) {
                 ingredientsStr.append("- ").append(ingredient.getName()).append(": ").append(" ").append(ingredient.getQuantity()).append(" ").append(ingredient.getMeasure()).append("<br/>");

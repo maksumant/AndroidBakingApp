@@ -13,15 +13,30 @@
     <TextView
         android:id="@+id/recipe_name"
         android:layout_marginTop="5dp"
-        android:layout_width="180dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
         android:textColor="#fafafa"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:textSize="25sp"
+        android:paddingLeft="5dp"
+        android:textStyle="bold|italic"
+        android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/laoding_text"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/appwidget_text"
+            android:text="@string/appwidget_text"
+            android:textColor="#fafafa"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,6 +48,16 @@
             android:contentDescription="Next recipe button"
             />
     </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:id="@+id/iv_app_icon"
+        android:layout_height="150dp"
+        android:src="@drawable/baking_icon"
+        android:layout_gravity="center"
+        android:foregroundGravity="center"
+        android:layout_marginTop="40dp"
+        android:contentDescription="Next recipe button"
+        />
     <TextView
         android:id="@+id/recipe_ingredients"
         android:layout_width="wrap_content"
@@ -44,6 +69,5 @@
         android:textSize="20sp"
         android:scrollbars="vertical"
          />
-
 
 </LinearLayout>

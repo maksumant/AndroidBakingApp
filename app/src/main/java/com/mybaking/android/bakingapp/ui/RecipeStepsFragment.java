@@ -83,37 +83,13 @@ public class RecipeStepsFragment extends Fragment {
                 linearLayout.addView(tvStepDesc);
             }
         }
-
-//        if(savedInstanceState!=null && savedInstanceState.containsKey("SCROLL_POSITION")) {
-//            mScrollViewPosition = savedInstanceState.getIntArray("SCROLL_POSITION");
-//            if (mScrollViewPosition != null)
-//                mDetailsScrollView.post(new Runnable() {
-//                    public void run() {
-//                        mDetailsScrollView.scrollTo(mScrollViewPosition[0], mScrollViewPosition[1]);
-//                    }
-//                });
-//        }
-
         return rootView;
     }
-
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        if (mScrollViewPosition != null)
-//                mDetailsScrollView.post(new Runnable() {
-//                    public void run() {
-//                        System.out.println("Setting position to:" + mScrollViewPosition);
-//                        mDetailsScrollView.scrollTo(mScrollViewPosition[0], mScrollViewPosition[1]);
-//                    }
-//                });
-//
-//    }
 
     private String generateIngredientsString(List<Ingredient> ingredients) {
         if (ingredients != null && !ingredients.isEmpty()) {
             StringBuilder ingredientsStr = new StringBuilder();
-            ingredientsStr.append("<h2>").append(this.getString(R.string.ingredients)).append("</h2><br/>");
+            ingredientsStr.append("<h2>").append(this.getString(R.string.ingredients)).append(":</h2>");
             for (Ingredient ingredient : ingredients) {
                 ingredientsStr.append("- ").append(ingredient.getName()).append(": ").append(" ").append(ingredient.getQuantity()).append(" ").append(ingredient.getMeasure()).append("<br/>");
             }

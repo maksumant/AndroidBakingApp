@@ -62,9 +62,11 @@ public class BakingRecipesService extends IntentService {
         if (mAllRecipes == null) {
             new LoadRecipeTask().execute(new Context[]{this});
 
-            while (mAllRecipes == null) {
+            int counter = 0;
+            while (mAllRecipes == null && counter < 10) {
                 try {
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.MILLISECONDS.sleep(30);
+                    counter++;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
