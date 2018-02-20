@@ -39,13 +39,13 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
         if (findViewById(R.id.ll_recipe_details) != null) {
             mTwoPane  = true;
-//            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
 
             // Recipe details fragement
-            if (savedInstanceState != null &&
-                    savedInstanceState.containsKey(SELECTED_RECIPE_DATA_KEY)) {
-                this.selectedRecipe = (Recipe) savedInstanceState.get(SELECTED_RECIPE_DATA_KEY);
+            if (savedInstanceState != null) {
+                    if (savedInstanceState.containsKey(SELECTED_RECIPE_DATA_KEY)) {
+                        this.selectedRecipe = (Recipe) savedInstanceState.get(SELECTED_RECIPE_DATA_KEY);
+                    }
+                  mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "stepDetailsFragement");
             } else if (this.selectedRecipe == null && intentThatStartedThisActivity.hasExtra(StringConstants.EXTRA_CONTENT_NAME)) {
                 this.selectedRecipe = (Recipe) intentThatStartedThisActivity.getParcelableExtra(StringConstants.EXTRA_CONTENT_NAME);
             }
@@ -64,9 +64,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
             if (mStepDetailsFragment == null) {
                 mStepDetailsFragment = new StepDetailsFragment();
                 mStepDetailsFragment.setShowFullScreenVideo(false);
+                this.mStepDetailsFragment.setRetainInstance(true);
             }
             if (!mStepDetailsFragment.isAdded()) {
-                fragmentManager.beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
+                fragmentManager.beginTransaction().add(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
             }
 
 
@@ -109,6 +110,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(SELECTED_RECIPE_DATA_KEY, this.selectedRecipe);
         getSupportFragmentManager().putFragment(outState, "recipeStepsFragment", recipeStepsFragment);
+        if (mTwoPane) {
+            getSupportFragmentManager().putFragment(outState, "stepDetailsFragement", mStepDetailsFragment);
+        }
         outState.putIntArray("SCROLL_POSITION",
                 new int[]{ mDetailsScrollView.getScrollX(), mDetailsScrollView.getScrollY()});
         super.onSaveInstanceState(outState);
@@ -123,10 +127,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
             intent.putParcelableArrayListExtra(StringConstants.EXTRA_RECIPE_ALL_STEPS, (ArrayList<RecipeStep>) selectedRecipe.getSteps());
             startActivity(intent);
         } else {
-            StepDetailsFragment stepDetailsFragment = new StepDetailsFragment();
-            stepDetailsFragment.setCurrentStep(step);
-            stepDetailsFragment.setShowFullScreenVideo(false);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_step_details_fragment, stepDetailsFragment).commit();
+            mStepDetailsFragment = new StepDetailsFragment();
+            mStepDetailsFragment.setCurrentStep(step);
+            mStepDetailsFragment.setShowFullScreenVideo(false);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
         }
     }
 }
