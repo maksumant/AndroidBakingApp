@@ -39,7 +39,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
         if (findViewById(R.id.ll_recipe_details) != null) {
             mTwoPane  = true;
-            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//            setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
 
             // Recipe details fragement

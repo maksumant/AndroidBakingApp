@@ -185,6 +185,7 @@ public class StepDetailsFragment extends Fragment {
         if(mFullScreenDialog != null) {
             mFullScreenDialog.dismiss();
         }
+        releasePlayer();
     }
 
     public void setCurrentStep(RecipeStep currentStep) {
