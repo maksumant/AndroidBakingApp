@@ -146,7 +146,6 @@ public class StepDetailsFragment extends Fragment {
         if(mSimpleExoPlayer != null) {
             mSimpleExoPlayer.stop();
             mSimpleExoPlayer.release();
-            mSimpleExoPlayer = null;
         }
     }
 
