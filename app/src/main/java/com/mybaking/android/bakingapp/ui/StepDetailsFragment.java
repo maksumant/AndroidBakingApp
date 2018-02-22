@@ -133,15 +133,6 @@ public class StepDetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mFullScreenDialog != null) {
-            mFullScreenDialog.dismiss();
-        }
-        releasePlayer();
-    }
-
     private void releasePlayer() {
         if(mSimpleExoPlayer != null) {
             mSimpleExoPlayer.stop();
