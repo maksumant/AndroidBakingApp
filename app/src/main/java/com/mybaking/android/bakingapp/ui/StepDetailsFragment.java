@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayer;
@@ -26,6 +27,9 @@ import com.google.android.exoplayer2.util.Util;
 import com.mybaking.android.bakingapp.R;
 import com.mybaking.android.bakingapp.domain.RecipeStep;
 import com.mybaking.android.bakingapp.video.CustomLoadControl;
+import com.squareup.picasso.Picasso;
+
+import java.net.URLDecoder;
 
 /**
  * Created by makrandsumant on 16/02/18.
@@ -38,6 +42,7 @@ public class StepDetailsFragment extends Fragment {
     private static final String VIDEO_PLAY_WHEN_READY_KEY = "playWhenReady";
     private SimpleExoPlayerView mSimpleExoPlayerView;
     private SimpleExoPlayer mSimpleExoPlayer;
+    private ImageView mStepThumbnail;
     private int mPlaybackState;
     private boolean mPlayWhenReady;
     private Dialog mFullScreenDialog;
@@ -55,6 +60,7 @@ public class StepDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         TextView stepDescription = (TextView) rootView.findViewById(R.id.tv_step_instruction);
+        mStepThumbnail = (ImageView) rootView.findViewById(R.id.im_step_thumbnail);
         mSimpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.ep_step_media_player);
 
 
@@ -76,14 +82,24 @@ public class StepDetailsFragment extends Fragment {
 
             String videoURL = currentStep.getVideoURL();
             if (videoURL != null && !videoURL.isEmpty() && mSimpleExoPlayer == null) {
+                this.showExoPlayerView();
                 mPlayWhenReady = true;
                 if (showFullScreenVideo) {
                     openFullScreenMode();
                 }
                 initializePlayer(Uri.parse(videoURL));
+            } else if (currentStep.getThumbnailURL() != null && !currentStep.getThumbnailURL().isEmpty() && mStepThumbnail != null) {
+                Picasso.with(this.getContext()).load(URLDecoder.decode(currentStep.getThumbnailURL())).into(mStepThumbnail);
+                mStepThumbnail.setVisibility(View.VISIBLE);
+                mSimpleExoPlayerView.setVisibility(View.GONE);
             }
         }
         return rootView;
+    }
+
+    private void showExoPlayerView() {
+        mSimpleExoPlayerView.setVisibility(View.VISIBLE);
+        mStepThumbnail.setVisibility(View.GONE);
     }
 
     private void openFullScreenMode() {
@@ -133,20 +149,10 @@ public class StepDetailsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mFullScreenDialog != null) {
-            mFullScreenDialog.dismiss();
-        }
-        releasePlayer();
-    }
-
     private void releasePlayer() {
         if(mSimpleExoPlayer != null) {
             mSimpleExoPlayer.stop();
             mSimpleExoPlayer.release();
-            mSimpleExoPlayer = null;
         }
     }
 
@@ -185,6 +191,7 @@ public class StepDetailsFragment extends Fragment {
         if(mFullScreenDialog != null) {
             mFullScreenDialog.dismiss();
         }
+        releasePlayer();
     }
 
     public void setCurrentStep(RecipeStep currentStep) {
