@@ -19,6 +19,15 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <ImageView
+        android:id="@+id/im_step_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tv_step_instruction"
         android:layout_width="match_parent"
