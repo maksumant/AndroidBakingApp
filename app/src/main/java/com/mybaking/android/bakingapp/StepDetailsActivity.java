@@ -24,6 +24,8 @@ public class StepDetailsActivity extends AppCompatActivity {
     private static final String SELECTED_STEP_KEY = "selectedStep";
     private static final String ALL_STEPS_KEY = "allSteps";
     private static final String SELECTED_STEP_INDEX_KEY = "selectedStepIndex";
+    private final String TAG_STEPS_FRAGMENT = "tagStepFragment";
+
 
 
     @Override
@@ -51,10 +53,11 @@ public class StepDetailsActivity extends AppCompatActivity {
             if (savedInstanceState.containsKey(ALL_STEPS_KEY)) {
                 mAllSteps = savedInstanceState.getParcelableArrayList(ALL_STEPS_KEY);
             }
-            mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "stepDetailsFragement");
+//            mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "stepDetailsFragement");
         }
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        mStepDetailsFragment = (StepDetailsFragment) fragmentManager.findFragmentByTag(TAG_STEPS_FRAGMENT);
         if (mStepDetailsFragment == null) {
             mStepDetailsFragment = new StepDetailsFragment();
             mStepDetailsFragment.setRetainInstance(true);
@@ -62,7 +65,7 @@ public class StepDetailsActivity extends AppCompatActivity {
         }
         mStepDetailsFragment.setShowFullScreenVideo(isLandscapeMode);
         if (!mStepDetailsFragment.isAdded()) {
-            fragmentManager.beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.fl_step_details_fragment, mStepDetailsFragment,TAG_STEPS_FRAGMENT).commit();
         }
         this.setTitle(mCurrentStep.getShortDescription());
 
@@ -130,7 +133,7 @@ public class StepDetailsActivity extends AppCompatActivity {
         outState.putParcelable(SELECTED_STEP_KEY, this.mCurrentStep);
         outState.putInt(SELECTED_STEP_INDEX_KEY, this.mCurrentStepIndex);
         outState.putParcelableArrayList(ALL_STEPS_KEY, this.mAllSteps);
-        getSupportFragmentManager().putFragment(outState, "stepDetailsFragement", mStepDetailsFragment);
+//        getSupportFragmentManager().putFragment(outState, "stepDetailsFragement", mStepDetailsFragment);
         super.onSaveInstanceState(outState);
     }
 

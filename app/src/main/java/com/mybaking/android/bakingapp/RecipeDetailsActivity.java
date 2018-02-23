@@ -24,6 +24,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     private StepDetailsFragment mStepDetailsFragment;
     private Recipe selectedRecipe = null;
     private final static String SELECTED_RECIPE_DATA_KEY = "selectedRecipe";
+    private final String TAG_STEPS_FRAGMENT = "tagStepFragment";
     private boolean mTwoPane;
     private ScrollView mDetailsScrollView;
 
@@ -45,11 +46,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                     if (savedInstanceState.containsKey(SELECTED_RECIPE_DATA_KEY)) {
                         this.selectedRecipe = (Recipe) savedInstanceState.get(SELECTED_RECIPE_DATA_KEY);
                     }
-                  mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "stepDetailsFragement");
+//                  mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().getFragment(savedInstanceState, "stepDetailsFragement");
             } else if (this.selectedRecipe == null && intentThatStartedThisActivity.hasExtra(StringConstants.EXTRA_CONTENT_NAME)) {
                 this.selectedRecipe = (Recipe) intentThatStartedThisActivity.getParcelableExtra(StringConstants.EXTRA_CONTENT_NAME);
             }
 
+            mStepDetailsFragment = (StepDetailsFragment) getSupportFragmentManager().findFragmentByTag(TAG_STEPS_FRAGMENT);
             if (this.recipeStepsFragment == null) {
                 this.recipeStepsFragment = new RecipeStepsFragment();
                 this.recipeStepsFragment.setCurrentRecipe(selectedRecipe);
@@ -64,11 +66,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
             if (mStepDetailsFragment == null) {
                 mStepDetailsFragment = new StepDetailsFragment();
                 mStepDetailsFragment.setShowFullScreenVideo(false);
-                this.mStepDetailsFragment.setRetainInstance(true);
+//                this.mStepDetailsFragment.setRetainInstance(true);
             }
             if (!mStepDetailsFragment.isAdded()) {
-                fragmentManager.beginTransaction().add(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
+                fragmentManager.beginTransaction().add(R.id.fl_step_details_fragment, mStepDetailsFragment, TAG_STEPS_FRAGMENT).commit();
             }
+
 
 
         } else {
@@ -89,7 +92,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                 this.recipeStepsFragment.setRetainInstance(true);
             }
             if (!this.recipeStepsFragment.isAdded()) {
-                fragmentManager.beginTransaction().replace(R.id.steps_container, recipeStepsFragment).commit();
+                fragmentManager.beginTransaction().add(R.id.steps_container, recipeStepsFragment, "").commit();
             }
             if(savedInstanceState != null) {
                 if (savedInstanceState.containsKey("SCROLL_POSITION")) {
@@ -130,7 +133,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
             mStepDetailsFragment = new StepDetailsFragment();
             mStepDetailsFragment.setCurrentStep(step);
             mStepDetailsFragment.setShowFullScreenVideo(false);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_step_details_fragment, mStepDetailsFragment, TAG_STEPS_FRAGMENT).commit();
         }
     }
 }
