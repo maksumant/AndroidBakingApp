@@ -58,6 +58,7 @@ public class StepDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
         TextView stepDescription = (TextView) rootView.findViewById(R.id.tv_step_instruction);
         mStepThumbnail = (ImageView) rootView.findViewById(R.id.im_step_thumbnail);
@@ -186,15 +187,38 @@ public class StepDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         if(mFullScreenDialog != null) {
             mFullScreenDialog.dismiss();
         }
         releasePlayer();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mFullScreenDialog != null) {
+            mFullScreenDialog.cancel();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (showFullScreenVideo) {
+            mFullScreenDialog.show();
+        }
+        if (mSimpleExoPlayer != null ) {
+            if (mPlaybackState == 0 || ((mPlaybackState == ExoPlayer.STATE_READY) && mPlayWhenReady)) {
+                mSimpleExoPlayer.setPlayWhenReady(true);
+            } else if ((mPlaybackState == ExoPlayer.STATE_READY)) {
+                mSimpleExoPlayer.setPlayWhenReady(false);
+            }
+        }
+    }
     public void setCurrentStep(RecipeStep currentStep) {
         this.currentStep = currentStep;
     }
 }
+
