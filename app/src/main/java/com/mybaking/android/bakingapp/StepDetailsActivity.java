@@ -133,7 +133,6 @@ public class StepDetailsActivity extends AppCompatActivity {
         outState.putParcelable(SELECTED_STEP_KEY, this.mCurrentStep);
         outState.putInt(SELECTED_STEP_INDEX_KEY, this.mCurrentStepIndex);
         outState.putParcelableArrayList(ALL_STEPS_KEY, this.mAllSteps);
-//        getSupportFragmentManager().putFragment(outState, "stepDetailsFragement", mStepDetailsFragment);
         super.onSaveInstanceState(outState);
     }
 

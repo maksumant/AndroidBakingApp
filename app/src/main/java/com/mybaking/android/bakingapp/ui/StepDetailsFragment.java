@@ -201,6 +201,7 @@ public class StepDetailsFragment extends Fragment {
         if(mFullScreenDialog != null) {
             mFullScreenDialog.cancel();
         }
+        releasePlayer();
     }
 
     @Override
