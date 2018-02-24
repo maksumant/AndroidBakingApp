@@ -187,20 +187,12 @@ public class StepDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if(mFullScreenDialog != null) {
-            mFullScreenDialog.dismiss();
-        }
-        releasePlayer();
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
         if(mFullScreenDialog != null) {
             mFullScreenDialog.cancel();
         }
+        releasePlayer();
     }
 
     @Override

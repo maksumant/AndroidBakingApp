@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -18,7 +19,9 @@ import com.mybaking.android.bakingapp.R;
 import com.mybaking.android.bakingapp.domain.Ingredient;
 import com.mybaking.android.bakingapp.domain.Recipe;
 import com.mybaking.android.bakingapp.domain.RecipeStep;
+import com.squareup.picasso.Picasso;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
@@ -29,9 +32,8 @@ public class RecipeStepsFragment extends Fragment {
 
     private static final String CURRENT_RECIPE_DATA_KEY = "currentRecipe";
     private Recipe currentRecipe;
+    private ImageView mRecipeImage;
     private StepsFragementOnClickListener onClickHandler;
-
-//    private int[] mScrollViewPosition;
 
     public RecipeStepsFragment() {
 
@@ -51,6 +53,9 @@ public class RecipeStepsFragment extends Fragment {
 
         LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.ll_recipes_fragment);
 
+        mRecipeImage = (ImageView) rootView.findViewById(R.id.recipe_image);
+
+
         if(savedInstanceState!=null) {
             if( savedInstanceState.containsKey(CURRENT_RECIPE_DATA_KEY)) {
                 this.currentRecipe = (Recipe) savedInstanceState.get(CURRENT_RECIPE_DATA_KEY);
@@ -61,6 +66,12 @@ public class RecipeStepsFragment extends Fragment {
         ingredientsTextView.setText(Html.fromHtml(this.generateIngredientsString(currentRecipe.getIngredients())));
 
         if (currentRecipe.getSteps()!=null && !currentRecipe.getSteps().isEmpty()) {
+            if (currentRecipe.getImageUrl() != null && !currentRecipe.getImageUrl().isEmpty()) {
+                Picasso.with(this.getContext()).load(URLDecoder.decode(currentRecipe.getImageUrl())).into(mRecipeImage);
+                mRecipeImage.setVisibility(View.VISIBLE);
+            } else {
+                mRecipeImage.setVisibility(View.GONE);
+            }
             TextView tvStepDesc = null;
             for (final RecipeStep step : currentRecipe.getSteps()) {
                 tvStepDesc = new TextView(this.getContext());
